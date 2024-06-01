@@ -1,7 +1,7 @@
 #include <assert.h>
 #include <stdio.h>
 #include "../includes/frame_buffer.h"
-#include "../includes/main_memory.h"
+#include "../includes/memory.h"
 
 void can_clear_framebuffer()
 {
@@ -30,7 +30,7 @@ void loads_rom_file_into_memory()
     // Act
     // load the test_opcode.ch8 file into memory
     main_memory mainMemory;
-    loadRomIntoMemory("./tests/test_opcode.ch8", &mainMemory);
+    loadRomIntoMainMemory("./tests/test_opcode.ch8", &mainMemory);
 
 //    for (int i = 0; i < 4096; i++)
 //    {
@@ -44,6 +44,21 @@ void loads_rom_file_into_memory()
     assert(mainMemory[0x200 + 0x1dd] == 0xdc);
     // assert byte after last byte of rom is zero
     assert(mainMemory[0x200 + 0x1dd + 1] == 0);
+}
+
+void return_from_subroutine()
+{
+    // Arrange
+    // 64 byte stack
+    // 8 bit stack pointer
+    // 16 bit program counter
+
+
+    // Act
+
+    // Assert
+    // program counter should be the address at the top of the stack
+    // stack pointer should be one less
 }
 
 int main ()
