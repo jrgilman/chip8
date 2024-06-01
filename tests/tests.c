@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include "../includes/frame_buffer.h"
 #include "../includes/memory.h"
+#include "../includes/cpu.h"
 
 void can_clear_framebuffer()
 {
@@ -52,18 +53,31 @@ void return_from_subroutine()
     // 64 byte stack
     // 8 bit stack pointer
     // 16 bit program counter
+    stack_pointer stackPointer = 64;
+    stack stack;
+    stack[stackPointer - 1] = 0xFF;
 
+    program_counter programCounter = 0xABCD;
 
     // Act
+    execute_instruction(
+        0x00EE,
+        &stack,
+        &stackPointer,
+        &programCounter
+    );
 
     // Assert
-    // program counter should be the address at the top of the stack
+    // program counter should be the value at the top of the stack
     // stack pointer should be one less
+    assert(programCounter == 0xFF);
+    assert(stackPointer == 63);
 }
 
 int main ()
 {
     can_clear_framebuffer();
     loads_rom_file_into_memory();
+    return_from_subroutine();
     return 0;
 }
