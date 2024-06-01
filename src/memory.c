@@ -4,13 +4,6 @@
 
 #define START_USABLE_MEMORY 0x200
 
-static main_memory mainMemory = {0};
-
-main_memory * getMainMemory()
-{
-    return &mainMemory;
-}
-
 void loadRomIntoMainMemory(const char * fileLocation, main_memory * mainMemory)
 {
     FILE * filePointer = fopen(fileLocation, "rb");
