@@ -161,8 +161,21 @@ void skip_next_instruction_if_vx_equals_nn()
 
     vRegisters[0xA] = 0xBC;
 
+    // should skip
     execute_instruction(
         0x3ABC,
+        &programStack,
+        &stackPointer,
+        &programCounter,
+        &frameBuffer,
+        &vRegisters
+    );
+
+    assert(programCounter == 2);
+
+    // now it shouldn't skip.
+    execute_instruction(
+        0x3ABB,
         &programStack,
         &stackPointer,
         &programCounter,
