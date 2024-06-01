@@ -9,14 +9,17 @@ void execute_instruction(
     program_counter * programCounter,
     frame_buffer * frameBuffer
 ) {
-    switch (instruction) {
-        case 0x00E0:
-            clearFrameBuffer(frameBuffer);
-            break;
-        case 0x00EE:
-            (*programCounter) = (*stack)[(*stackPointer) - 1];
-            (*stackPointer)--;
-            break;
-        default:
+    if (instruction == 0x00E0)
+    {
+        clearFrameBuffer(frameBuffer);
+    }
+    else if (instruction == 0x00EE)
+    {
+        (*programCounter) = (*stack)[(*stackPointer) - 1];
+        (*stackPointer)--;
+    }
+    else if ((instruction & 0xF000) == 0x1000)
+    {
+        (*programCounter) = instruction & 0x0FFF;
     }
 }

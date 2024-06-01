@@ -110,10 +110,26 @@ void return_from_subroutine()
     assert(stackPointer == 63);
 }
 
+void can_jump()
+{
+    setup();
+
+    execute_instruction(
+        0x1DEF,
+        &programStack,
+        &stackPointer,
+        &programCounter,
+        &frameBuffer
+    );
+
+    assert(programCounter == 0xDEF);
+}
+
 int main ()
 {
     can_clear_framebuffer();
     loads_rom_file_into_memory();
     return_from_subroutine();
+    can_jump();
     return 0;
 }
