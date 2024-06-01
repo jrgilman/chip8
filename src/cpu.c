@@ -40,4 +40,15 @@ void execute_instruction(
             (*programCounter) += 2;
         }
     }
+    else if ((instruction & 0xF000) == 0x4000)
+    {
+        // SNE VX, NN (4XNN)
+        uint8_t valueToCompare = instruction & 0xFF;
+        uint8_t vRegister = (instruction >> 8) & 0xF;
+
+        if ((*vRegisters)[vRegister] != valueToCompare)
+        {
+            (*programCounter) += 2;
+        }
+    }
 }

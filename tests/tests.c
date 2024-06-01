@@ -186,6 +186,38 @@ void skip_next_instruction_if_vx_equals_nn()
     assert(programCounter == 2);
 }
 
+void skip_next_instruction_if_vx_not_equal_to_nn()
+{
+    // 4XNN
+    // SNE VX, NN
+    setup();
+
+    // it should skip because they're not equal here
+    vRegisters[0xA] = 0xBC;
+    execute_instruction(
+        0x4ABB,
+        &programStack,
+        &stackPointer,
+        &programCounter,
+        &frameBuffer,
+        &vRegisters
+    );
+
+    assert(programCounter == 2);
+
+    // it should not skip here because they're equal
+    execute_instruction(
+        0x4ABC,
+        &programStack,
+        &stackPointer,
+        &programCounter,
+        &frameBuffer,
+        &vRegisters
+    );
+
+    assert(programCounter == 2);
+}
+
 int main ()
 {
     can_clear_framebuffer();
@@ -194,6 +226,7 @@ int main ()
     can_jump();
     call_subroutine_at_address();
     skip_next_instruction_if_vx_equals_nn();
+    skip_next_instruction_if_vx_not_equal_to_nn();
 
     return 0;
 }
