@@ -29,8 +29,8 @@ void loads_rom_file_into_memory()
 {
     // Act
     // load the test_opcode.ch8 file into memory
-    main_memory * mainMemory = getMainMemory();
-    loadRomIntoMemory("./tests/test_opcode.ch8", mainMemory);
+    main_memory mainMemory;
+    loadRomIntoMemory("./tests/test_opcode.ch8", &mainMemory);
 
 //    for (int i = 0; i < 4096; i++)
 //    {
@@ -39,11 +39,11 @@ void loads_rom_file_into_memory()
 
     // Assert
     // assert first byte of rom appears at memory location 0x200
-    assert((*mainMemory)[0x200] == 0x12);
+    assert(mainMemory[0x200] == 0x12);
     // assert last byte of rom appears at expected end
-    assert((*mainMemory)[0x200 + 0x1dd] == 0xdc);
+    assert(mainMemory[0x200 + 0x1dd] == 0xdc);
     // assert byte after last byte of rom is zero
-    assert((*mainMemory)[0x200 + 0x1dd + 1] == 0);
+    assert(mainMemory[0x200 + 0x1dd + 1] == 0);
 }
 
 int main ()

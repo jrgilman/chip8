@@ -21,7 +21,7 @@ void loadRomIntoMemory(const char * fileLocation, main_memory * mainMemory)
     fileLength = ftell(filePointer);
     rewind(filePointer);
 
-    printf("%li\n", fileLength);
+//    printf("%li\n", fileLength);
 
     for (int i = 0; i < fileLength; i++)
     {
