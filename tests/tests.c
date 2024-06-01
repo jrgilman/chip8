@@ -9,6 +9,7 @@ static stack_pointer stackPointer;
 static stack programStack;
 static program_counter programCounter;
 static main_memory mainMemory;
+static v_registers vRegisters;
 
 void setup()
 {
@@ -29,6 +30,11 @@ void setup()
     {
         mainMemory[i] = 0;
     }
+
+    for (int i = 0; i < 16; i++)
+    {
+        vRegisters[i] = 0;
+    }
 }
 
 void can_clear_framebuffer()
@@ -48,7 +54,8 @@ void can_clear_framebuffer()
         &programStack,
         &stackPointer,
         &programCounter,
-        &frameBuffer
+        &frameBuffer,
+        &vRegisters
     );
 
     // Assert
@@ -100,7 +107,8 @@ void return_from_subroutine()
         &programStack,
         &stackPointer,
         &programCounter,
-        &frameBuffer
+        &frameBuffer,
+        &vRegisters
     );
 
     // Assert
@@ -119,7 +127,8 @@ void can_jump()
         &programStack,
         &stackPointer,
         &programCounter,
-        &frameBuffer
+        &frameBuffer,
+        &vRegisters
     );
 
     assert(programCounter == 0xDEF);
@@ -136,12 +145,32 @@ void call_subroutine_at_address()
         &programStack,
         &stackPointer,
         &programCounter,
-        &frameBuffer
+        &frameBuffer,
+        &vRegisters
     );
 
     assert(stackPointer == 1);
     assert(programStack[stackPointer - 1] == 0x12);
     assert(programCounter == 0xABC);
+}
+
+void skip_next_instruction_if_vx_equals_nn()
+{
+    // 3XNN
+    setup();
+
+    vRegisters[0xA] = 0xBC;
+
+    execute_instruction(
+        0x3ABC,
+        &programStack,
+        &stackPointer,
+        &programCounter,
+        &frameBuffer,
+        &vRegisters
+    );
+
+    assert(programCounter == 2);
 }
 
 int main ()
@@ -151,5 +180,7 @@ int main ()
     return_from_subroutine();
     can_jump();
     call_subroutine_at_address();
+    skip_next_instruction_if_vx_equals_nn();
+
     return 0;
 }

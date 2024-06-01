@@ -9,7 +9,8 @@ void execute_instruction(
     stack * stack,
     stack_pointer * stackPointer,
     program_counter * programCounter,
-    frame_buffer * frameBuffer
+    frame_buffer * frameBuffer,
+    v_registers * vRegisters
 );
 
 #endif //CHIP8_CPU_H
