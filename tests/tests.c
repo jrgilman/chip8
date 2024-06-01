@@ -7,21 +7,21 @@ void can_clear_framebuffer()
 {
     // Arrange
     // we need a frame buffer that isn't empty that we intend to clear
-    frame_buffer * frameBuffer = getFrameBuffer();
+    frame_buffer frameBuffer;
     for (int i = 0; i < FRAME_BUFFER_WIDTH * FRAME_BUFFER_HEIGHT; i++)
     {
-        (*frameBuffer)[i] = 1;
+        frameBuffer[i] = 1;
     }
 
     // Act
-    clearFrameBuffer(frameBuffer);
+    clearFrameBuffer(&frameBuffer);
 
     // Assert
     // it should contain all zeroes after clearing
     for (int i = 0; i < FRAME_BUFFER_WIDTH * FRAME_BUFFER_HEIGHT; i++)
     {
 //        printf("%p : %i\n", frameBuffer + i, (*frameBuffer)[i]);
-        assert((*frameBuffer)[i] == 0);
+        assert(frameBuffer[i] == 0);
     }
 }
 

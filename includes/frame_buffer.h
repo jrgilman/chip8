@@ -6,8 +6,6 @@
 
 typedef int frame_buffer[FRAME_BUFFER_WIDTH * FRAME_BUFFER_HEIGHT];
 
-frame_buffer * getFrameBuffer();
-
 void clearFrameBuffer(frame_buffer * frameBuffer);
 
 #endif //CHIP8_FRAME_BUFFER_H
