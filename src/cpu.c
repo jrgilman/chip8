@@ -22,4 +22,10 @@ void execute_instruction(
     {
         (*programCounter) = instruction & 0x0FFF;
     }
+    else if ((instruction & 0xF000) == 0x2000)
+    {
+        (*stackPointer)++;
+        (*stack)[(*stackPointer) - 1] = *programCounter;
+        (*programCounter) = instruction & 0x0FFF;
+    }
 }

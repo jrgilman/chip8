@@ -125,11 +125,31 @@ void can_jump()
     assert(programCounter == 0xDEF);
 }
 
+void call_subroutine_at_address()
+{
+    setup();
+
+    programCounter = 0x12;
+
+    execute_instruction(
+        0x2ABC,
+        &programStack,
+        &stackPointer,
+        &programCounter,
+        &frameBuffer
+    );
+
+    assert(stackPointer == 1);
+    assert(programStack[stackPointer - 1] == 0x12);
+    assert(programCounter == 0xABC);
+}
+
 int main ()
 {
     can_clear_framebuffer();
     loads_rom_file_into_memory();
     return_from_subroutine();
     can_jump();
+    call_subroutine_at_address();
     return 0;
 }
