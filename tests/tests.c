@@ -14,8 +14,18 @@ void can_clear_framebuffer()
         frameBuffer[i] = 1;
     }
 
+    stack_pointer stackPointer;
+    stack stack;
+    program_counter programCounter;
+
     // Act
-    clearFrameBuffer(&frameBuffer);
+    execute_instruction(
+        0x00E0,
+        &stack,
+        &stackPointer,
+        &programCounter,
+        &frameBuffer
+    );
 
     // Assert
     // it should contain all zeroes after clearing
@@ -50,6 +60,8 @@ void loads_rom_file_into_memory()
 void return_from_subroutine()
 {
     // Arrange
+    frame_buffer frameBuffer;
+
     // 64 byte stack
     // 8 bit stack pointer
     // 16 bit program counter
@@ -64,7 +76,8 @@ void return_from_subroutine()
         0x00EE,
         &stack,
         &stackPointer,
-        &programCounter
+        &programCounter,
+        &frameBuffer
     );
 
     // Assert

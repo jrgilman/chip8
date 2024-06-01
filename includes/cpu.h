@@ -2,12 +2,14 @@
 #define CHIP8_CPU_H
 
 #include "memory.h"
+#include "frame_buffer.h"
 
 void execute_instruction(
     uint16_t instruction,
     stack * stack,
     stack_pointer * stackPointer,
-    program_counter * programCounter
+    program_counter * programCounter,
+    frame_buffer * frameBuffer
 );
 
 #endif //CHIP8_CPU_H
