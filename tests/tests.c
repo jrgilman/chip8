@@ -4,24 +4,48 @@
 #include "../includes/memory.h"
 #include "../includes/cpu.h"
 
-void can_clear_framebuffer()
+static frame_buffer frameBuffer;
+static stack_pointer stackPointer;
+static stack programStack;
+static program_counter programCounter;
+static main_memory mainMemory;
+
+void setup()
 {
-    // Arrange
-    // we need a frame buffer that isn't empty that we intend to clear
-    frame_buffer frameBuffer;
+    programCounter = 0;
+
     for (int i = 0; i < FRAME_BUFFER_WIDTH * FRAME_BUFFER_HEIGHT; i++)
     {
         frameBuffer[i] = 1;
     }
 
-    stack_pointer stackPointer;
-    stack stack;
-    program_counter programCounter;
+    stackPointer = 0;
+    for (int i = 0; i < 64; i++)
+    {
+        programStack[i] = 0;
+    }
+
+    for (int i = 0; i < 4096; i++)
+    {
+        mainMemory[i] = 0;
+    }
+}
+
+void can_clear_framebuffer()
+{
+    setup();
+
+    // Arrange
+    // we need a frame buffer that isn't empty that we intend to clear
+    for (int i = 0; i < FRAME_BUFFER_WIDTH * FRAME_BUFFER_HEIGHT; i++)
+    {
+        frameBuffer[i] = 1;
+    }
 
     // Act
     execute_instruction(
         0x00E0,
-        &stack,
+        &programStack,
         &stackPointer,
         &programCounter,
         &frameBuffer
@@ -38,9 +62,10 @@ void can_clear_framebuffer()
 
 void loads_rom_file_into_memory()
 {
+    setup();
+
     // Act
     // load the test_opcode.ch8 file into memory
-    main_memory mainMemory;
     loadRomIntoMainMemory("./tests/test_opcode.ch8", &mainMemory);
 
 //    for (int i = 0; i < 4096; i++)
@@ -59,22 +84,20 @@ void loads_rom_file_into_memory()
 
 void return_from_subroutine()
 {
-    // Arrange
-    frame_buffer frameBuffer;
+    setup();
 
+    // Arrange
     // 64 byte stack
     // 8 bit stack pointer
     // 16 bit program counter
     stack_pointer stackPointer = 64;
-    stack stack;
-    stack[stackPointer - 1] = 0xFF;
-
+    programStack[stackPointer - 1] = 0xFF;
     program_counter programCounter = 0xABCD;
 
     // Act
     execute_instruction(
         0x00EE,
-        &stack,
+        &programStack,
         &stackPointer,
         &programCounter,
         &frameBuffer
