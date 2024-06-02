@@ -104,6 +104,10 @@ void execute_instruction(
                 (*vRegisters)[0xF] = ((*vRegisters)[vRegisterX] > (uint8_t) ((*vRegisters)[vRegisterX] + (*vRegisters)[vRegisterY]));
                 (*vRegisters)[vRegisterX] += (*vRegisters)[vRegisterY];
                 break;
+            case 0x0005:
+                (*vRegisters)[0xF] = (*vRegisters)[vRegisterX] > (*vRegisters)[vRegisterY];
+                (*vRegisters)[vRegisterX] -= (*vRegisters)[vRegisterY];
+                break;
             default:
                 printf("Got an unexpected opcode 0x%04X\n", instruction);
                 exit(EXIT_FAILURE);

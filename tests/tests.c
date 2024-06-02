@@ -519,6 +519,30 @@ void add_vx_and_vy_store_in_vx_with_carry_in_vf()
     assert(vRegisters[0xF] == 0x01);
 }
 
+void subtract_vx_and_vy_set_vf_if_borrow_occurs() {
+    setup();
+
+    // V0 - V1 should result in V0 = 0xFE and borrowing did not occur so VF = 1
+    vRegisters[0x0] = 0xFF;
+    vRegisters[0x1] = 0x01;
+    vRegisters[0xF] = 0;
+
+    execute_instruction(
+        0x8015,
+        &programStack,
+        &stackPointer,
+        &programCounter,
+        &frameBuffer,
+        &vRegisters
+    );
+
+    // unchanged
+    assert(vRegisters[0x1] == 0x01);
+
+    assert(vRegisters[0x0] == 0xFE);
+    assert(vRegisters[0xF] == 0x01);
+}
+
 int main ()
 {
     printf("Running unit tests\n");
@@ -550,7 +574,7 @@ int main ()
     vx_anded_with_vy_then_stored_in_vx();           // 8xy2 - AND Vx, Vy
     vx_xored_with_vy_then_stored_in_vx();           // 8xy3 - XOR Vx, Vy
     add_vx_and_vy_store_in_vx_with_carry_in_vf();   // 8xy4 - ADD Vx, Vy
-    // 8xy5 - SUB Vx, Vy
+    subtract_vx_and_vy_set_vf_if_borrow_occurs();   // 8xy5 - SUB Vx, Vy
     // 8xy6 - SHR Vx {, Vy}
     // 8xy7 - SUBN Vx, Vy
     // 8xyE - SHL Vx {, Vy}
