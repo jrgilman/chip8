@@ -51,4 +51,14 @@ void execute_instruction(
             (*programCounter) += 2;
         }
     }
+    else if ((instruction & 0xF000) == 0x5000)
+    {
+        uint8_t vRegisterOne = (instruction >> 4) & 0xF;
+        uint8_t vRegisterTwo = (instruction >> 8) & 0xF;
+
+        if ((*vRegisters)[vRegisterOne] != (*vRegisters)[vRegisterTwo])
+        {
+            (*programCounter) += 2;
+        }
+    }
 }

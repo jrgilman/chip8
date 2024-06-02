@@ -224,6 +224,41 @@ void skip_next_instruction_if_vx_not_equal_to_nn()
     assert(programCounter == 2);
 }
 
+void skip_next_instruction_if_vx_not_equal_to_vy() {
+    // 5XY0
+    setup();
+    programCounter = 0;
+
+    vRegisters[0x0] = 0;
+    vRegisters[0xA] = 1;
+    vRegisters[0xB] = 0;
+
+    execute_instruction(
+        0x50A0,
+        &programStack,
+        &stackPointer,
+        &programCounter,
+        &frameBuffer,
+        &vRegisters
+    );
+
+    // V0 is not equal to VA thus PC should be 2
+    assert(programCounter == 2);
+
+    // V0 and VB are the same thus PC should remain at 2
+    execute_instruction(
+        0x5B00,
+        &programStack,
+        &stackPointer,
+        &programCounter,
+        &frameBuffer,
+        &vRegisters
+    );
+
+    // V0 and VB are the same thus PC should remain at 2
+    assert(programCounter == 2);
+}
+
 int main ()
 {
     printf("Running unit tests\n");
@@ -244,6 +279,7 @@ int main ()
     call_subroutine_at_address();
     skip_next_instruction_if_vx_equals_nn();
     skip_next_instruction_if_vx_not_equal_to_nn();
+    skip_next_instruction_if_vx_not_equal_to_vy();
 
     printf("Tests complete\n");
     return 0;
