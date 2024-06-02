@@ -314,6 +314,25 @@ void load_vy_into_vx() {
     assert(vRegisters[0xB] == 0xF);
 }
 
+void vx_ored_with_vy_then_stored_in_vx() {
+    setup();
+
+    vRegisters[0xA] = 0xF0;
+    vRegisters[0xB] = 0x0F;
+
+    execute_instruction(
+        0x8AB1,
+        &programStack,
+        &stackPointer,
+        &programCounter,
+        &frameBuffer,
+        &vRegisters
+    );
+
+    assert(vRegisters[0xA] == 0xFF);
+    assert(vRegisters[0xB] == 0x0F);
+}
+
 int main ()
 {
     printf("Running unit tests\n");
@@ -327,17 +346,42 @@ int main ()
     strcpy(testOpcodeFile, executable_dir);
     strcat(testOpcodeFile, "/test_opcode.ch8");
 
-    can_clear_framebuffer();
-    loads_rom_file_into_memory();
-    return_from_subroutine();
-    can_jump();
-    call_subroutine_at_address();
-    skip_next_instruction_if_vx_equals_nn();
-    skip_next_instruction_if_vx_not_equal_to_nn();
-    skip_next_instruction_if_vx_not_equal_to_vy();
-    load_nn_into_vx();
-    add_vx_and_nn();
-    load_vy_into_vx();
+    loads_rom_file_into_memory();                   // not an opcode - this is pre boot of the virtual machine / emulator
+    can_clear_framebuffer();                        // 00E0 - CLS
+    return_from_subroutine();                       // 00EE - RET
+                                                    // 0nnn - SYS addr - not implemented
+    can_jump();                                     // 1nnn - JP addr
+    call_subroutine_at_address();                   // 2nnn - CALL addr
+    skip_next_instruction_if_vx_equals_nn();        // 3xnn - SE Vx, byte
+    skip_next_instruction_if_vx_not_equal_to_nn();  // 4xkk - SNE Vx, byte
+    skip_next_instruction_if_vx_not_equal_to_vy();  // 5xy0 - SE Vx, Vy
+    load_nn_into_vx();                              // 6xnn - LD Vx, byte
+    add_vx_and_nn();                                // 7xnn - ADD Vx, byte
+    load_vy_into_vx();                              // 8xy0 - LD Vx, Vy
+    vx_ored_with_vy_then_stored_in_vx();            // 8xy1 - OR Vx, Vy
+    // 8xy2 - AND Vx, Vy
+    // 8xy3 - XOR Vx, Vy
+    // 8xy4 - ADD Vx, Vy
+    // 8xy5 - SUB Vx, Vy
+    // 8xy6 - SHR Vx {, Vy}
+    // 8xy7 - SUBN Vx, Vy
+    // 8xyE - SHL Vx {, Vy}
+    // 9xy0 - SNE Vx, Vy
+    // Annn - LD I, addr
+    // Bnnn - JP V0, addr
+    // Cxkk - RND Vx, byte
+    // Dxyn - DRW Vx, Vy, nibble
+    // Ex9E - SKP Vx
+    // ExA1 - SKNP Vx
+    // Fx07 - LD Vx, DT
+    // Fx0A - LD Vx, K
+    // Fx15 - LD DT, Vx
+    // Fx18 - LD ST, Vx
+    // Fx1E - ADD I, Vx
+    // Fx29 - LD F, Vx
+    // Fx33 - LD B, Vx
+    // Fx55 - LD [I], Vx
+    // Fx65 - LD Vx, [I]
 
     printf("Tests complete\n");
     return 0;

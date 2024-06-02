@@ -8,7 +8,8 @@ void execute_instruction(
     frame_buffer * frameBuffer,
     v_registers * vRegisters
 ) {
-    uint16_t instructionTopNibble = (instruction & 0xF000);
+    uint16_t instructionTopNibble = instruction & 0xF000;
+    uint16_t instructionBottomNibble = instruction & 0x000F;
 
     if (instruction == 0x00E0)
     {
@@ -83,6 +84,9 @@ void execute_instruction(
         uint8_t vRegisterY = (instruction >> 4) & 0xF;
         uint8_t vRegisterX = (instruction >> 8) & 0xF;
 
-        (*vRegisters)[vRegisterX] = (*vRegisters)[vRegisterY];
+        if (instructionBottomNibble == 0x0001)
+            (*vRegisters)[vRegisterX] |= (*vRegisters)[vRegisterY];
+        else
+            (*vRegisters)[vRegisterX] = (*vRegisters)[vRegisterY];
     }
 }
