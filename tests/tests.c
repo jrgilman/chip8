@@ -259,6 +259,23 @@ void skip_next_instruction_if_vx_not_equal_to_vy() {
     assert(programCounter == 2);
 }
 
+void load_nn_into_vx() {
+    setup();
+    vRegisters[0x0] = 0;
+
+    // V0 and VB are the same thus PC should remain at 2
+    execute_instruction(
+        0x60FF,
+        &programStack,
+        &stackPointer,
+        &programCounter,
+        &frameBuffer,
+        &vRegisters
+    );
+
+    assert(vRegisters[0x0] == 0xFF);
+}
+
 int main ()
 {
     printf("Running unit tests\n");
@@ -280,6 +297,7 @@ int main ()
     skip_next_instruction_if_vx_equals_nn();
     skip_next_instruction_if_vx_not_equal_to_nn();
     skip_next_instruction_if_vx_not_equal_to_vy();
+    load_nn_into_vx();
 
     printf("Tests complete\n");
     return 0;

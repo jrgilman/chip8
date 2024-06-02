@@ -61,4 +61,12 @@ void execute_instruction(
             (*programCounter) += 2;
         }
     }
+    else if (instructionTopNibbleOnly == 0x6000)
+    {
+        // 6XNN
+        // Load NN into VX
+        uint8_t vRegister = (instruction >> 8) & 0xF;
+        uint8_t valueToLoad = instruction & 0xFF;
+        (*vRegisters)[vRegister] = valueToLoad;
+    }
 }
