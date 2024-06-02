@@ -69,4 +69,12 @@ void execute_instruction(
         uint8_t valueToLoad = instruction & 0xFF;
         (*vRegisters)[vRegister] = valueToLoad;
     }
+    else if (instructionTopNibbleOnly == 0x7000)
+    {
+        // 7XNN
+        // Add NN into VX
+        uint8_t vRegister = (instruction >> 8) & 0xF;
+        uint8_t valueToAdd = instruction & 0xFF;
+        (*vRegisters)[vRegister] += valueToAdd;
+    }
 }

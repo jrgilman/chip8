@@ -263,7 +263,6 @@ void load_nn_into_vx() {
     setup();
     vRegisters[0x0] = 0;
 
-    // V0 and VB are the same thus PC should remain at 2
     execute_instruction(
         0x60FF,
         &programStack,
@@ -273,6 +272,26 @@ void load_nn_into_vx() {
         &vRegisters
     );
 
+    assert(vRegisters[0x0] == 0xFF);
+}
+
+void add_vx_and_nn()
+{
+    // 7xnn
+    setup();
+    vRegisters[0x0] = 0x01;
+
+    // V0
+    execute_instruction(
+        0x70FE,
+        &programStack,
+        &stackPointer,
+        &programCounter,
+        &frameBuffer,
+        &vRegisters
+    );
+
+    // 0x01 plus 0xFE should be 0xFF
     assert(vRegisters[0x0] == 0xFF);
 }
 
@@ -298,6 +317,7 @@ int main ()
     skip_next_instruction_if_vx_not_equal_to_nn();
     skip_next_instruction_if_vx_not_equal_to_vy();
     load_nn_into_vx();
+    add_vx_and_nn();
 
     printf("Tests complete\n");
     return 0;
