@@ -353,6 +353,25 @@ void vx_anded_with_vy_then_stored_in_vx()
     assert(vRegisters[0xB] == 0x0F);
 };
 
+void vx_xored_with_vy_then_stored_in_vx() {
+    setup();
+
+    vRegisters[0xA] = 0xF0;
+    vRegisters[0xB] = 0x1F;
+
+    execute_instruction(
+        0x8AB3,
+        &programStack,
+        &stackPointer,
+        &programCounter,
+        &frameBuffer,
+        &vRegisters
+    );
+
+    assert(vRegisters[0xA] == 0xEF);
+    assert(vRegisters[0xB] == 0x1F);
+}
+
 int main ()
 {
     printf("Running unit tests\n");
@@ -380,7 +399,7 @@ int main ()
     load_vy_into_vx();                              // 8xy0 - LD Vx, Vy
     vx_ored_with_vy_then_stored_in_vx();            // 8xy1 - OR Vx, Vy
     vx_anded_with_vy_then_stored_in_vx();           // 8xy2 - AND Vx, Vy
-    // 8xy3 - XOR Vx, Vy
+    vx_xored_with_vy_then_stored_in_vx();           // 8xy3 - XOR Vx, Vy
     // 8xy4 - ADD Vx, Vy
     // 8xy5 - SUB Vx, Vy
     // 8xy6 - SHR Vx {, Vy}

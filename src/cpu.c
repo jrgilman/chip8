@@ -97,6 +97,9 @@ void execute_instruction(
             case 0x0002:
                 (*vRegisters)[vRegisterX] &= (*vRegisters)[vRegisterY];
                 break;
+            case 0x0003:
+                (*vRegisters)[vRegisterX] ^= (*vRegisters)[vRegisterY];
+                break;
             default:
                 printf("Got an unexpected opcode 0x%04X\n", instruction);
                 exit(EXIT_FAILURE);
