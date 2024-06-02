@@ -8,7 +8,7 @@ void execute_instruction(
     frame_buffer * frameBuffer,
     v_registers * vRegisters
 ) {
-    uint16_t instructionTopNibbleOnly = (instruction & 0xF000);
+    uint16_t instructionTopNibble = (instruction & 0xF000);
 
     if (instruction == 0x00E0)
     {
@@ -19,17 +19,17 @@ void execute_instruction(
         (*programCounter) = (*stack)[(*stackPointer) - 1];
         (*stackPointer)--;
     }
-    else if (instructionTopNibbleOnly == 0x1000)
+    else if (instructionTopNibble == 0x1000)
     {
         (*programCounter) = instruction & 0x0FFF;
     }
-    else if (instructionTopNibbleOnly == 0x2000)
+    else if (instructionTopNibble == 0x2000)
     {
         (*stackPointer)++;
         (*stack)[(*stackPointer) - 1] = *programCounter;
         (*programCounter) = instruction & 0x0FFF;
     }
-    else if (instructionTopNibbleOnly == 0x3000)
+    else if (instructionTopNibble == 0x3000)
     {
         // SE VX, NN (3XNN)
         uint8_t valueToCompare = instruction & 0xFF;
@@ -40,7 +40,7 @@ void execute_instruction(
             (*programCounter) += 2;
         }
     }
-    else if (instructionTopNibbleOnly == 0x4000)
+    else if (instructionTopNibble == 0x4000)
     {
         // SNE VX, NN (4XNN)
         uint8_t valueToCompare = instruction & 0xFF;
@@ -51,7 +51,7 @@ void execute_instruction(
             (*programCounter) += 2;
         }
     }
-    else if (instructionTopNibbleOnly == 0x5000)
+    else if (instructionTopNibble == 0x5000)
     {
         uint8_t vRegisterOne = (instruction >> 4) & 0xF;
         uint8_t vRegisterTwo = (instruction >> 8) & 0xF;
@@ -61,7 +61,7 @@ void execute_instruction(
             (*programCounter) += 2;
         }
     }
-    else if (instructionTopNibbleOnly == 0x6000)
+    else if (instructionTopNibble == 0x6000)
     {
         // 6XNN
         // Load NN into VX
@@ -69,7 +69,7 @@ void execute_instruction(
         uint8_t valueToLoad = instruction & 0xFF;
         (*vRegisters)[vRegister] = valueToLoad;
     }
-    else if (instructionTopNibbleOnly == 0x7000)
+    else if (instructionTopNibble == 0x7000)
     {
         // 7XNN
         // Add NN into VX
@@ -77,7 +77,7 @@ void execute_instruction(
         uint8_t valueToAdd = instruction & 0xFF;
         (*vRegisters)[vRegister] += valueToAdd;
     }
-    else if (instructionTopNibbleOnly == 0x8000)
+    else if (instructionTopNibble == 0x8000)
     {
         // Load VY into VX (8xy0)
         uint8_t vRegisterY = (instruction >> 4) & 0xF;
