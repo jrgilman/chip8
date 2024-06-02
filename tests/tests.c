@@ -372,6 +372,31 @@ void vx_xored_with_vy_then_stored_in_vx() {
     assert(vRegisters[0xB] == 0x1F);
 }
 
+void add_vx_and_vy_store_in_vx_with_carry_in_vf()
+{
+    setup();
+
+    // the result of this addition should cause a 0x1 carry to VF and 0x0 in V0
+    vRegisters[0x0] = 0xFE;
+    vRegisters[0x1] = 0x02;
+    vRegisters[0xF] = 0;
+
+    execute_instruction(
+        0x8014,
+        &programStack,
+        &stackPointer,
+        &programCounter,
+        &frameBuffer,
+        &vRegisters
+    );
+
+    // unchanged
+    assert(vRegisters[0x1] == 0x02);
+
+    assert(vRegisters[0x0] == 0x00);
+    assert(vRegisters[0xF] == 0x01);
+}
+
 int main ()
 {
     printf("Running unit tests\n");
@@ -400,7 +425,7 @@ int main ()
     vx_ored_with_vy_then_stored_in_vx();            // 8xy1 - OR Vx, Vy
     vx_anded_with_vy_then_stored_in_vx();           // 8xy2 - AND Vx, Vy
     vx_xored_with_vy_then_stored_in_vx();           // 8xy3 - XOR Vx, Vy
-    // 8xy4 - ADD Vx, Vy
+    add_vx_and_vy_store_in_vx_with_carry_in_vf();   // 8xy4 - ADD Vx, Vy
     // 8xy5 - SUB Vx, Vy
     // 8xy6 - SHR Vx {, Vy}
     // 8xy7 - SUBN Vx, Vy
