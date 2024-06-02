@@ -395,7 +395,7 @@ int main ()
     skip_next_instruction_if_vx_not_equal_to_nn();  // 4xkk - SNE Vx, byte
     skip_next_instruction_if_vx_not_equal_to_vy();  // 5xy0 - SE Vx, Vy
     load_nn_into_vx();                              // 6xnn - LD Vx, byte
-    add_vx_and_nn();                                // 7xnn - ADD Vx, byte
+    add_vx_and_nn();                                // 7xnn - ADD Vx, byte (question: do we not store the carry in VF?)
     load_vy_into_vx();                              // 8xy0 - LD Vx, Vy
     vx_ored_with_vy_then_stored_in_vx();            // 8xy1 - OR Vx, Vy
     vx_anded_with_vy_then_stored_in_vx();           // 8xy2 - AND Vx, Vy
