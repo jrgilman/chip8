@@ -1,3 +1,5 @@
+#include "stdio.h"
+#include "stdlib.h"
 #include "../includes/cpu.h"
 
 void execute_instruction(
@@ -84,9 +86,20 @@ void execute_instruction(
         uint8_t vRegisterY = (instruction >> 4) & 0xF;
         uint8_t vRegisterX = (instruction >> 8) & 0xF;
 
-        if (instructionBottomNibble == 0x0001)
-            (*vRegisters)[vRegisterX] |= (*vRegisters)[vRegisterY];
-        else
-            (*vRegisters)[vRegisterX] = (*vRegisters)[vRegisterY];
+        switch (instructionBottomNibble)
+        {
+            case 0x0000:
+                (*vRegisters)[vRegisterX] = (*vRegisters)[vRegisterY];
+                break;
+            case 0x0001:
+                (*vRegisters)[vRegisterX] |= (*vRegisters)[vRegisterY];
+                break;
+            case 0x0002:
+                (*vRegisters)[vRegisterX] &= (*vRegisters)[vRegisterY];
+                break;
+            default:
+                printf("Got an unexpected opcode 0x%04X\n", instruction);
+                exit(EXIT_FAILURE);
+        }
     }
 }
