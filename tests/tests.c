@@ -295,6 +295,25 @@ void add_vx_and_nn()
     assert(vRegisters[0x0] == 0xFF);
 }
 
+void load_vy_into_vx() {
+    // 8xy0
+    setup();
+
+    vRegisters[0xA] = 0xF;
+    vRegisters[0xB] = 0x0;
+
+    execute_instruction(
+        0x8BA0,
+        &programStack,
+        &stackPointer,
+        &programCounter,
+        &frameBuffer,
+        &vRegisters
+    );
+
+    assert(vRegisters[0xB] == 0xF);
+}
+
 int main ()
 {
     printf("Running unit tests\n");
@@ -318,6 +337,7 @@ int main ()
     skip_next_instruction_if_vx_not_equal_to_vy();
     load_nn_into_vx();
     add_vx_and_nn();
+    load_vy_into_vx();
 
     printf("Tests complete\n");
     return 0;

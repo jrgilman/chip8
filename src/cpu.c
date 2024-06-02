@@ -77,4 +77,12 @@ void execute_instruction(
         uint8_t valueToAdd = instruction & 0xFF;
         (*vRegisters)[vRegister] += valueToAdd;
     }
+    else if (instructionTopNibbleOnly == 0x8000)
+    {
+        // Load VY into VX (8xy0)
+        uint8_t vRegisterY = (instruction >> 4) & 0xF;
+        uint8_t vRegisterX = (instruction >> 8) & 0xF;
+
+        (*vRegisters)[vRegisterX] = (*vRegisters)[vRegisterY];
+    }
 }
