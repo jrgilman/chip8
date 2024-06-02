@@ -9,6 +9,7 @@ typedef uint8_t stack_pointer;
 typedef uint16_t program_counter;
 typedef uint8_t v_registers[16];
 
+void preloadMainMemory(main_memory * mainMemory);
 void loadRomIntoMainMemory(const char * fileLocation, main_memory * mainMemory);
 
 #endif //CHIP8_MAIN_MEMORY_H

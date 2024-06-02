@@ -37,10 +37,132 @@ void setup()
         mainMemory[i] = 0;
     }
 
+    preloadMainMemory(&mainMemory);
+
     for (int i = 0; i < 16; i++)
     {
         vRegisters[i] = 0;
     }
+}
+
+
+void sprites_are_in_reserved_memory() {
+    setup();
+
+    // Act
+    // we need to make sure the main memory contains the proper static values
+
+    // 0
+    assert(mainMemory[0] == 0xF0);
+    assert(mainMemory[1] == 0x90);
+    assert(mainMemory[2] == 0x90);
+    assert(mainMemory[3] == 0x90);
+    assert(mainMemory[4] == 0xF0);
+
+    // 1
+    assert(mainMemory[5] == 0x20);
+    assert(mainMemory[6] == 0x60);
+    assert(mainMemory[7] == 0x20);
+    assert(mainMemory[8] == 0x20);
+    assert(mainMemory[9] == 0x70);
+
+    // 2
+    assert(mainMemory[10] == 0xF0);
+    assert(mainMemory[11] == 0x10);
+    assert(mainMemory[12] == 0xF0);
+    assert(mainMemory[13] == 0x80);
+    assert(mainMemory[14] == 0xF0);
+
+    // 3
+    assert(mainMemory[15] == 0xF0);
+    assert(mainMemory[16] == 0x10);
+    assert(mainMemory[17] == 0xF0);
+    assert(mainMemory[18] == 0x10);
+    assert(mainMemory[19] == 0xF0);
+
+    // 4
+    assert(mainMemory[20] == 0x90);
+    assert(mainMemory[21] == 0x90);
+    assert(mainMemory[22] == 0xF0);
+    assert(mainMemory[23] == 0x10);
+    assert(mainMemory[24] == 0x10);
+
+    // 5
+    assert(mainMemory[25] == 0xF0);
+    assert(mainMemory[26] == 0x80);
+    assert(mainMemory[27] == 0xF0);
+    assert(mainMemory[28] == 0x10);
+    assert(mainMemory[29] == 0xF0);
+
+    // 6
+    assert(mainMemory[30] == 0xF0);
+    assert(mainMemory[31] == 0x80);
+    assert(mainMemory[32] == 0xF0);
+    assert(mainMemory[33] == 0x90);
+    assert(mainMemory[34] == 0xF0);
+
+    // 7
+    assert(mainMemory[35] == 0xF0);
+    assert(mainMemory[36] == 0x10);
+    assert(mainMemory[37] == 0x20);
+    assert(mainMemory[38] == 0x40);
+    assert(mainMemory[39] == 0x40);
+
+    // 8
+    assert(mainMemory[40] == 0xF0);
+    assert(mainMemory[41] == 0x90);
+    assert(mainMemory[42] == 0xF0);
+    assert(mainMemory[43] == 0x90);
+    assert(mainMemory[44] == 0xF0);
+
+    // 9
+    assert(mainMemory[45] == 0xF0);
+    assert(mainMemory[46] == 0x90);
+    assert(mainMemory[47] == 0xF0);
+    assert(mainMemory[48] == 0x10);
+    assert(mainMemory[49] == 0xF0);
+
+    // A
+    assert(mainMemory[50] == 0xF0);
+    assert(mainMemory[51] == 0x90);
+    assert(mainMemory[52] == 0xF0);
+    assert(mainMemory[53] == 0x90);
+    assert(mainMemory[54] == 0x90);
+
+    // B
+    assert(mainMemory[55] == 0xE0);
+    assert(mainMemory[56] == 0x90);
+    assert(mainMemory[57] == 0xE0);
+    assert(mainMemory[58] == 0x90);
+    assert(mainMemory[59] == 0xE0);
+
+    // C
+    assert(mainMemory[60] == 0xF0);
+    assert(mainMemory[61] == 0x80);
+    assert(mainMemory[62] == 0x80);
+    assert(mainMemory[63] == 0x80);
+    assert(mainMemory[64] == 0xF0);
+
+    // D
+    assert(mainMemory[65] == 0xE0);
+    assert(mainMemory[66] == 0x90);
+    assert(mainMemory[67] == 0x90);
+    assert(mainMemory[68] == 0x90);
+    assert(mainMemory[69] == 0xE0);
+
+    // E
+    assert(mainMemory[70] == 0xF0);
+    assert(mainMemory[71] == 0x80);
+    assert(mainMemory[72] == 0xF0);
+    assert(mainMemory[73] == 0x80);
+    assert(mainMemory[74] == 0xF0);
+
+    // F
+    assert(mainMemory[75] == 0xF0);
+    assert(mainMemory[76] == 0x80);
+    assert(mainMemory[77] == 0xF0);
+    assert(mainMemory[78] == 0x80);
+    assert(mainMemory[79] == 0x80);
 }
 
 void can_clear_framebuffer()
@@ -411,6 +533,8 @@ int main ()
     strcat(testOpcodeFile, "/test_opcode.ch8");
 
     loads_rom_file_into_memory();                   // not an opcode - this is pre boot of the virtual machine / emulator
+    sprites_are_in_reserved_memory();               // not an opcode - just confirms the sprites are there
+
     can_clear_framebuffer();                        // 00E0 - CLS
     return_from_subroutine();                       // 00EE - RET
                                                     // 0nnn - SYS addr - not implemented
