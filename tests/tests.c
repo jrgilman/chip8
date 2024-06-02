@@ -1,5 +1,9 @@
-#include <assert.h>
-#include <stdio.h>
+#include "assert.h"
+#include "stdio.h"
+#include "stdlib.h"
+#include "string.h"
+#include "libgen.h"
+
 #include "../includes/frame_buffer.h"
 #include "../includes/memory.h"
 #include "../includes/cpu.h"
@@ -10,6 +14,8 @@ static stack programStack;
 static program_counter programCounter;
 static main_memory mainMemory;
 static v_registers vRegisters;
+
+static char * testOpcodeFile;
 
 void setup()
 {
@@ -73,7 +79,7 @@ void loads_rom_file_into_memory()
 
     // Act
     // load the test_opcode.ch8 file into memory
-    loadRomIntoMainMemory("./tests/test_opcode.ch8", &mainMemory);
+    loadRomIntoMainMemory(testOpcodeFile, &mainMemory);
 
 //    for (int i = 0; i < 4096; i++)
 //    {
@@ -220,6 +226,17 @@ void skip_next_instruction_if_vx_not_equal_to_nn()
 
 int main ()
 {
+    printf("Running unit tests\n");
+
+    // Get the directory path of the executable
+    char* executable_path = strdup(__FILE__);
+    char* executable_dir = dirname(executable_path);
+
+    // Construct the path to the test_opcode.ch8 file relative to the executable
+    testOpcodeFile = malloc(strlen(executable_dir) + strlen("/test_opcode.ch8") + 1);
+    strcpy(testOpcodeFile, executable_dir);
+    strcat(testOpcodeFile, "/test_opcode.ch8");
+
     can_clear_framebuffer();
     loads_rom_file_into_memory();
     return_from_subroutine();
@@ -228,5 +245,6 @@ int main ()
     skip_next_instruction_if_vx_equals_nn();
     skip_next_instruction_if_vx_not_equal_to_nn();
 
+    printf("Tests complete\n");
     return 0;
 }
